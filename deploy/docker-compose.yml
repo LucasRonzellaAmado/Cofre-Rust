@@ -1,0 +1,22 @@
+services:
+  cofre-server:
+    build: ..
+    image: cofre-server:latest
+    restart: unless-stopped
+    environment:
+      COFRE_APPEND_ONLY: "true"
+      COFRE_TOKEN_FILE: /run/secrets/cofre_token
+      RUST_LOG: info
+    secrets:
+      - cofre_token
+    volumes:
+      - cofre-data:/data
+    ports:
+      - "127.0.0.1:8000:8000"
+
+secrets:
+  cofre_token:
+    file: ./cofre_token.txt
+
+volumes:
+  cofre-data:

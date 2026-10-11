@@ -1,0 +1,13 @@
+[Unit]
+Description=Backup Cofre
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/cofre/cofre.env
+ExecStart=/usr/local/bin/cofre backup /srv/empresa --exclude-file /etc/cofre/excludes.txt
+ExecStartPost=/usr/local/bin/cofre forget --keep-daily 7 --keep-weekly 4 --keep-monthly 12
+Nice=10
+IOSchedulingClass=idle
+SuccessExitStatus=3

@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  binaries:
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            ext: ""
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            ext: ".exe"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - run: cargo build --release --target ${{ matrix.target }} -p cofre-cli -p cofre-server
+      - shell: bash
+        run: |
+          mkdir dist
+          cp target/${{ matrix.target }}/release/cofre${{ matrix.ext }} dist/cofre-${{ matrix.target }}${{ matrix.ext }}
+          cp target/${{ matrix.target }}/release/cofre-server${{ matrix.ext }} dist/cofre-server-${{ matrix.target }}${{ matrix.ext }}
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}/cofre-server:${{ github.ref_name }}

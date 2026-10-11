@@ -1,0 +1,23 @@
+pub mod backend;
+pub mod backup;
+pub mod check;
+pub mod chunker;
+pub mod crypto;
+pub mod error;
+pub mod id;
+pub mod local;
+pub mod lock;
+pub mod paths;
+pub mod prune;
+pub mod repo;
+pub mod restore;
+pub mod retention;
+pub mod snapshot;
+pub mod time;
+
+pub use backend::{Backend, Kind};
+pub use error::{BackendError, Error, Result};
+pub use id::ChunkId;
+pub use local::LocalBackend;
+pub use repo::{InitOptions, Repository};
+pub use snapshot::{Node, NodeKind, Snapshot, Summary};

@@ -1,0 +1,41 @@
+[package]
+name = "cofre-cli"
+description = "Interface de linha de comando do Cofre"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lib]
+name = "cofre_cli"
+path = "src/lib.rs"
+
+[[bin]]
+name = "cofre"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+clap.workspace = true
+cofre-core.workspace = true
+futures.workspace = true
+gethostname.workspace = true
+object_store.workspace = true
+reqwest.workspace = true
+rpassword.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+axum.workspace = true
+cofre-server.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true
